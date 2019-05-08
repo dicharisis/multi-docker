@@ -1,0 +1,27 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t dicharisis/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run dicharisis/react-test npm test -- --coverage  
+
+after_success:
+  - docker build -t dicharisis/multi-client ./client 
+  - docker build -t dicharisis/multi-nginx ./nginx
+  - docker build -t dicharisis/multi-server ./server
+  - docker build -t dicharisis/multi-worker ./worker
+
+#Log in to docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password=stdin
+
+#Take those images and push them to docker hub
+  - docker push dicharisis/multi-client
+  - docker push dicharisis/multi-nginx
+  - docker push dicharisis/multi-server
+  - docker push dicharisis/multi-worker
+
+
+
