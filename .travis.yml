@@ -13,9 +13,8 @@ after_success:
   - docker build -t dicharisis/multi-nginx ./nginx
   - docker build -t dicharisis/multi-server ./server
   - docker build -t dicharisis/multi-worker ./worker
-
 #Log in to docker CLI
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password=stdin
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
 
 #Take those images and push them to docker hub
   - docker push dicharisis/multi-client
